@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  assignment_tracker:
+    build:
+      context: .
+    volumes:
+      - static_data:/vol/web
+    environment:
+      - ALLOWED_HOSTS=142.93.251.173,localhost,127.0.0.1
+  proxy:
+    build:
+      context: ./proxy
+    volumes:
+      - static_data:/vol/static
+    ports:
+      - "8080:8080"
+    depends_on:
+      - assignment_tracker
+
+volumes:
+  static_data:
