@@ -1,21 +1,22 @@
-version: '3.7'
+version: '3.9'
 services:
   assignment_tracker:
     build:
       context: .
+    restart: always
     volumes:
       - static_data:/vol/web
-    environment:
-      - ALLOWED_HOSTS=142.93.251.173,localhost,127.0.0.1
+
   proxy:
     build:
       context: ./proxy
+    restart: always
+    depends_on:
+      - assignment_tracker
     volumes:
       - static_data:/vol/static
     ports:
-      - "8080:8080"
-    depends_on:
-      - assignment_tracker
+      - "80:8080"
 
 volumes:
   static_data:
