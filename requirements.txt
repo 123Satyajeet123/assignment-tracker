@@ -3,3 +3,4 @@ pymongo==3.11.4
 boto3
 django-cors-headers
 uWSGI
+# gunicorn

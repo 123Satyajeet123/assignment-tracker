@@ -1,29 +1,34 @@
-FROM python:3.10-alpine
+FROM python:3.9-alpine3.13
 
-RUN apk add --update --no-cache --virtual .tmp gcc libc-dev linux-headers
+LABEL maintainer="satyajeet"
 
-ENV PATH="/scripts:${PATH}"
+ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt
-RUN apk del .tmp
-
-RUN mkdir /assignment_tracker
 COPY ./assignment_tracker /assignment_tracker
+
 WORKDIR /assignment_tracker
-COPY ./scripts /scripts
-RUN chmod +x /scripts/*
 
-RUN mkdir -p /vol/web/media
-RUN mkdir -p /vol/web/
+EXPOSE 8000
 
-RUN adduser -D admin
-RUN chown -R admin:admin /vol 
-RUN chmod -R 755 /vol/web
+# Install build dependencies
+RUN apk update && \
+    apk add --no-cache build-base linux-headers && \
+    apk add --no-cache postgresql-dev gcc python3-dev musl-dev
 
-USER admin
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    /py/bin/pip install -r /requirements.txt && \
+    adduser --disabled-password --no-create-home app && \
+    mkdir -p /vol/web/static && \
+    mkdir -p /vol/web/media && \
+    chown -R app:app /vol && \
+    chmod -R 755 /vol
 
-# Collect static files and start uWSGI
-#RUN python3 manage.py collectstatic --noinput
+# Remove build dependencies
+RUN apk del build-base linux-headers
 
-CMD ["entrypoint.sh"]
+ENV PATH="/py/bin:$PATH"
+
+USER app
+

@@ -1,0 +1,14 @@
+.git
+.gitignore
+
+.docker
+
+assignment_tracker/__pycache__/
+assignment_tracker/*/__pycache__/
+assignment_tracker/*/*/__pycache__/
+assignment_tracker/*/*/*/__pycache__/
+.env/
+.venv/
+venv/
+
+data/

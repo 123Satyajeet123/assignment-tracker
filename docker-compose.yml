@@ -1,12 +1,11 @@
-version: '3.7'
+version: '3.9'
 services:
   assignment_tracker:
     build:
       context: .
     ports:
       - "8000:8000"
-    environment:
-      - ALLOWED_HOSTS=142.93.251.173,localhost,127.0.0.1
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./assignment_tracker:/assignment_tracker
-      - ./vol/web/static:/vol/web/static
+      - ./data/web:/vol/web
