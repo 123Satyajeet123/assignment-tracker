@@ -222,6 +222,7 @@ def assign_all(request, talent_type, job_id):
                     "job_id": job_id,
                     "assignment_data": assignment_job["assignment"],
                     "completion_date": completion_date,
+                    "assigned_date" : datetime.now()
                 }
                 # assignment_data = {
                 #     "title":title,
